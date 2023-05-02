@@ -1,0 +1,222 @@
+======================================================================
+                    R E A D M E . D B 
+                    doc: Thu Oct 13 13:13:24 2022
+                    dlm: Thu Oct 13 15:32:59 2022
+                    (c) 2022 A.M. Thurnherr
+                    uE-Info: 175 70 NIL 0 0 72 3 2 4 NIL ofnI
+======================================================================
+
+======================================================================
+
+SR1b SOUTHERN OCEAN REPEAT SECTION FINESTRUCTURE DATABASE
+
+Reference: Thurnherr et al. (JPO, in prep)
+
+HISTORY:
+	V0.0 (20220619):
+		- initial release with data used during preparation of manuscript draft
+	V0.1 (20221013):
+		- 
+		- added LADCP profiles
+
+======================================================================
+
+=Overview=
+
+This data base contains three sets of profiles with CTD, LADCP, as well
+as several derived finestructure parameterizations from the 19 repeat
+occupations of the UK SR1b section across the ACC carried out between
+2002 and 2019. The section consists of 27 repeat stations (R01-R27).
+For each repeat station there are three netCDF data files with time
+series of vertical profiles: a CTD file with the suffix _CTD.nc, a
+LADCP file with the suffix _LADCP.nc, and a finestructure parameter
+file with the suffix _FSP.nc.
+
+----------------------------------------------------------------------
+
+=Database Version Numbers and Release Dates=
+
+The data base is identified by its release date (20220619 for the
+initial release) and version number (e.g. V0.0). Version numbers < 1.0
+are used for pre-publication work; once the manuscript has been
+accepted, the version number of the data base will be increased to 1.0
+(major version 1, sub-version 0). Every time the data base is updated,
+the version number is increased. The minor version number is increase
+on simple corrections, such as bug fixes, that do not require changes
+in the documentation. Changes in the major version indicate more
+substantial updates, such as changes in the methodology or addition of
+new sections or finestructure parameters. 
+
+----------------------------------------------------------------------
+
+=netCDF Conventions and Units=
+
+All variables and attributes have unabbreviated names, such as "depth",
+"buoyancy-frequency", "shear-to-strain-variance-ratio", etc. Each
+variable has its units recorded in the ":units" attribute (e.g.
+"depth:units"); SI units are used throughout. Variables with missing
+units attributes are dimensionless. 
+
+----------------------------------------------------------------------
+
+=CTD Profiles=
+
+Each CTD file (e.g. R10_CTD.nc) contains a time series of CTD profiles
+(indexed by the profile_number netCDF coordinate) and binned at 1.25m
+vertical resolution. Because some of the profiles were collected before
+2010, the EOS83 (with ITS-90) is used throughout. 
+
+Each profile contains the following metadata:
+	cruise_id					e.g. 2002_JR81; see reference for
+								additional information 
+	date						date when profile was collected
+	time						time at start of profile
+	station_number				original station number used on the
+								cruise 
+	latitude					latitude in degrees East
+	longitude					longitude in degrees North
+	DB_version					database version (see above)
+
+Each profiles contains the following depth-binned quantities, indexed
+by the depth_coordinate netCDF coordinate:
+	depth						vertical distance from the sea surface
+	height_above_seabed			vertical distance from the sea bed
+	potential_temperature		potential temperature
+	practical_salinity			practical salinity
+	neutral_density_gamma_n		unitless neutral density of Jackett and
+								McDougall (JPO 1997)
+	buoyancy_frequency			buoyancy frequency (density
+								stratification)
+
+----------------------------------------------------------------------
+
+=LADCP Profiles=
+
+Each LADCP file (e.g. R10_LADCP.nc) contains a time series of LADCP
+profiles (indexed by the profile_number netCDF coordinate) of all three
+components of the velocity field, resampled to 5m vertical resolution
+with linear interpolation. Note that this amounts to oversampling of
+the original velocity profiles, which are binned at ~8m for the
+horizontal components, and at 40m for vertical velocity.
+
+Each profile contains the following metadata:
+	cruise_id					e.g. 2002_JR81; see reference for
+								additional information 
+	date						date when profile was collected
+	time						time at start of profile
+	station_number				original station number used on the
+								cruise 
+	latitude					latitude in degrees East
+	longitude					longitude in degrees North
+	DB_version					database version (see above)
+
+Each profiles contains the following depth-binned quantities, indexed
+by the depth_coordinate netCDF coordinate:
+	depth						vertical distance from the sea surface
+	height_above_seabed			vertical distance from the sea bed
+	zonal_velocity				u, positive eastward
+	meridional_velocity			v, postiive northward
+	downcast_vertical_velocity	w, positive upward
+	upcast_vertical_velocity	w, positive upward
+
+----------------------------------------------------------------------
+
+=Finestructure Profiles=
+
+Each finestructure data file (e.g. R10_FSP.nc) contains a time series
+of LADCP data and derived finestructure variables in 320-m-thick
+half-overlapping bins, starting near the surface with an additional
+window covering the bottom-most part of the profile. Each profile
+contains the same metadata as the corresponding CTD and LADCP profiles
+(see above).
+
+For each window, the following variables are recorded:
+	window_index				starting at 1 near the surface; -1 for
+								the bottom window
+	window_depth.min			upper limit of window
+	window_depth.max			lower limit of window
+
+Because of differences in depth resolution and bottom gaps of the
+different data sources, there are generally small differences between
+the windows used for the different finestructure parameters. For most
+purposes these differences can safely be ignored. The following 
+variables define the nominal depths of each recorded quantity:
+	depth						depth of the middle of the strain window
+	hab							water-depth minus "depth" variable
+
+In addition to the windowing and depth information, each profile
+contains the following finestructure quantities:
+	strain_buoyancy_frequency	average buoyancy frequency in the strain 
+								window 
+	strain_finescale_power		finescale strain level
+	strain_GM76_power			finescale strain level in the
+								Garrett-Munk model
+	strain_normalized_finescale_power
+								finescale strain level normalized by GM
+	strain_spectral_slope		finescale spectral slope on a log-log
+								plot (power-law exponent)
+	shear_buoyancy_frequency	average buoyancy frequency in the strain
+								window 
+	shear_finescale_rotary_power_positive
+	shear_finescale_rotary_power_negative					
+								finescale level of buoyancy-frequency
+								normalized shear from rotary spectral
+								analysis 
+	shear_GM76_power
+								finescale level of buoyancy-frequency
+								normalized (total) shear in the
+								Garrett-Munk model
+	shear_normalized_finescale_power
+								finescale level of buoyancy-frequency
+								normalized shear further normalized by
+								GM 
+	shear_spectral_slope		finescale spectral slope on a log-log
+								plot (power law exponent)
+	shear_rotary_coefficient	rotary coefficient derived from shear 								
+	divergence_buoyancy_frequency
+								average buoyancy frequency in the window
+								used for vertical divergence
+	divergence_finescale_power	finescale level of buoyancy-frequency
+								normalized vertical divergence of
+								vertical velocity
+	divergence_GM76_power		finescale level of buoyancy-frequency
+								normalized  vertical divergence in the
+								Garrett-Munk model
+	divergence_normalized_finescale_power
+								finescale level of buoyancy-frequency
+								normalized vertical divergence further
+								normalized by GM
+	divergence_spectral_slope	finescale spectral slope on a log-log
+								plot (power law exponent)
+	vertical_kinetic_energy_finescale_power_intercept
+								p0 of Thurnherr et al. (GRL 2015)
+	vertical_kinetic_energy_spectral_slope
+								finescale spectral slope on a log-log
+								plot (power law exponent)
+	shear_to_strain_variance_ratio
+								variance ratio of buoyancy-frequency
+								normalized shear and strain
+	divergence_to_strain_variance_ratio
+								variance ratio of buoyancy-frequency
+								normalized vertical divergence and
+								strain 
+	shear_to_divergence_variance_ratio
+								variance ratio of buoyancy-frequency
+								normalized shear and buoyancy-frequency
+								normalized vertical divergence
+
+
+Each profile additionally contains the following LADCP-derived
+quantities, all averaged in the windows used for the strain
+calculations:
+	zonal_velocity				u
+	meridional_velocity			v
+	horizontal_kinetic_energy	u^2+v^2
+	acoustic_backscatter		acoustic backscatter coefficient (Sv)
+								from the LADCP downcast of the
+								downlooker instrument, calibrated with
+								the method of Deines (1999)
+	LADCP_instrument_range		range (vertical distance from the
+								transducer) of valid LADCP velocity
+								measurements 
+
